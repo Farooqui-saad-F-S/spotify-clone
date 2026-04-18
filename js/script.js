@@ -25,7 +25,8 @@ async function getSongs() {
 const playMusic = (track, pause = false) => {
     currentTrackName = track;
     console.log(currentTrackName);
-    currentSong.src = "songs/" + track + ".mp3";
+    currentSong.src = "./songs/" + track + ".mp3";
+    currentSong.load();
     if (!pause) {
         currentSong.play();
         play.src = "img/pause.svg";
@@ -73,7 +74,7 @@ async function main() {
     });
 
     currentSong.addEventListener("timeupdate", () => {
-        if (!isNaN(currentSong.duration)) {
+        if (currentSong.duration && !isNaN(currentSong.duration)) {
             document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
             document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
         }
