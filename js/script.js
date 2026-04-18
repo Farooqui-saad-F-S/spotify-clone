@@ -73,14 +73,21 @@ async function main() {
     });
 
     currentSong.addEventListener("timeupdate", () => {
-        document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
-        document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
+        if (!isNaN(currentSong.duration)) {
+            document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
+            document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
+        }
     });
 
-    document.querySelector(".seekbar").addEventListener("click", e => {
-        let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
-        document.querySelector(".circle").style.left = percent + "%";
-        currentSong.currentTime = (percent / 100) * currentSong.duration;
+    document.querySelector(".seekbar").addEventListener("click", (e) => {
+        let rect = e.currentTarget.getBoundingClientRect();
+        let percent = (e.clientX - rect.left) / rect.width;
+
+        document.querySelector(".circle").style.left = percent * 100 + "%";
+
+        if (!isNaN(currentSong.duration)) {
+            currentSong.currentTime = percent * currentSong.duration;
+        }
     });
 
     document.querySelector(".hamburger").addEventListener("click", () => {
