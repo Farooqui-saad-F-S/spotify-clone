@@ -1,6 +1,7 @@
 let currentSong = new Audio();
 let songs;
 let currentTrack = "";
+let isSeeking = false;
 
 function secondsToMinutesSeconds(seconds) {
     if (isNaN(seconds) || seconds < 0) {
@@ -74,9 +75,12 @@ async function main() {
     });
 
     currentSong.addEventListener("timeupdate", () => {
-        if (currentSong.duration && !isNaN(currentSong.duration)) {
-            document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
-            document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
+        if (!isNaN(currentSong.duration) && !isSeeking) {
+            document.querySelector(".songtime").innerHTML =
+                `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
+
+            document.querySelector(".circle").style.left =
+                (currentSong.currentTime / currentSong.duration) * 100 + "%";
         }
     });
 
@@ -84,11 +88,17 @@ async function main() {
         let rect = e.currentTarget.getBoundingClientRect();
         let percent = (e.clientX - rect.left) / rect.width;
 
+        isSeeking = true;
+
         document.querySelector(".circle").style.left = percent * 100 + "%";
 
         if (!isNaN(currentSong.duration)) {
             currentSong.currentTime = percent * currentSong.duration;
         }
+
+        setTimeout(() => {
+            isSeeking = false;
+        }, 500); // allow update after seek
     });
 
     document.querySelector(".hamburger").addEventListener("click", () => {
