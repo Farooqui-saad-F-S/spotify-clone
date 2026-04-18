@@ -1,6 +1,6 @@
 let currentSong = new Audio();
 let songs;
-
+let currentTrack = "";
 
 function secondsToMinutesSeconds(seconds) {
     if (isNaN(seconds) || seconds < 0) {
@@ -23,6 +23,8 @@ async function getSongs() {
 }
 
 const playMusic = (track, pause = false) => {
+    currentTrackName = track;
+    console.log(currentTrackName);
     currentSong.src = "songs/" + track + ".mp3";
     if (!pause) {
         currentSong.play();
@@ -90,20 +92,20 @@ async function main() {
     })
 
     previous.addEventListener("click", () => {
-        let index = songs.indexOf(currentSong.src.split("s/")[1].split(".mp3")[0])
-        if ((index - 1) >= 0) {
-            playMusic(songs[index - 1])
+        let index = songs.findIndex(song => song.name === currentTrackName);
+
+        if (index > 0) {
+            playMusic(songs[index - 1].name);
         }
     });
 
     next.addEventListener("click", () => {
-        console.log("next clicked");
-        let index = songs.indexOf(currentSong.src.split("s/")[1].split(".mp3")[0])
+        let index = songs.findIndex(song => song.name === currentTrackName);
+
         if (index < songs.length - 1) {
-            playMusic(songs[index + 1]);
-        }
-        else {
-            playMusic(songs[0]);
+            playMusic(songs[index + 1].name);
+        } else {
+            playMusic(songs[0].name);
         }
     });
 
@@ -112,14 +114,14 @@ async function main() {
     })
 
     const handleMusicClick = (index) => {
-    let currentTrack = currentSong.src.split("/songs/")[1]?.split(".mp3")[0];
+        let currentTrack = currentSong.src.split("/songs/")[1]?.split(".mp3")[0];
 
-    if (currentTrack === songs[index].name) {
-        playMusic(songs[index].name, true);
-    } else {
-        playMusic(songs[index].name);
-    }
-};
+        if (currentTrack === songs[index].name) {
+            playMusic(songs[index].name, true);
+        } else {
+            playMusic(songs[index].name);
+        }
+    };
 
     document.querySelectorAll(".card").forEach((el) => {
         el.addEventListener("click", () => {
