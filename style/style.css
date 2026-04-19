@@ -354,7 +354,7 @@ body {
     .playbar {
         width: calc(100vw - 30px);
         bottom: 5px;
-        padding: 0;
+        padding: 0px 0px 0px 14px;
     }
 
     .seekbar {
