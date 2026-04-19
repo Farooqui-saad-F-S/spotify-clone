@@ -1,7 +1,6 @@
 let currentSong = new Audio();
 let songs;
 let currentTrackName = "";
-let isSeeking = false;
 
 let isReady = false;
 
@@ -96,7 +95,10 @@ async function main() {
         let rect = e.currentTarget.getBoundingClientRect();
         let percent = (e.clientX - rect.left) / rect.width;
 
-        isSeeking = true;
+        let wasPlaying = !currentSong.paused;
+
+        // ✅ Pause temporarily
+        currentSong.pause();
 
         document.querySelector(".circle").style.left = percent * 100 + "%";
 
@@ -104,11 +106,11 @@ async function main() {
             currentSong.currentTime = percent * currentSong.duration;
         }
 
-        setTimeout(() => {
-            isSeeking = false;
-        }, 100); // allow update after seek
+        // ✅ Resume if it was playing
+        if (wasPlaying) {
+            currentSong.play();
+        }
     });
-
     document.querySelector(".hamburger").addEventListener("click", () => {
         document.querySelector(".left").style.left = 0;
     })
