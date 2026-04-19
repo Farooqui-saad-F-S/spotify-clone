@@ -281,7 +281,7 @@ body {
     position: absolute;
     top: -5px;
     left: 0%;
-    transition: left 0.5s;
+    transition: left 0.5s linear;
 }
 
 .songbuttons img {

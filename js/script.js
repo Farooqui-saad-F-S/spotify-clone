@@ -1,7 +1,14 @@
 let currentSong = new Audio();
 let songs;
-let currentTrack = "";
+let currentTrackName = "";
 let isSeeking = false;
+
+let isReady = false;
+
+currentSong.addEventListener("loadedmetadata", () => {
+    isReady = true;
+    console.log("Audio loaded:", currentSong.duration);
+});
 
 function secondsToMinutesSeconds(seconds) {
     if (isNaN(seconds) || seconds < 0) {
@@ -24,9 +31,10 @@ async function getSongs() {
 }
 
 const playMusic = (track, pause = false) => {
+    isReady = false;
     currentTrackName = track;
     console.log(currentTrackName);
-    currentSong.src = "./songs/" + track + ".mp3";
+    currentSong.src = "songs/" + track + ".mp3";
     currentSong.load();
     if (!pause) {
         currentSong.play();
@@ -98,7 +106,7 @@ async function main() {
 
         setTimeout(() => {
             isSeeking = false;
-        }, 500); // allow update after seek
+        }, 100); // allow update after seek
     });
 
     document.querySelector(".hamburger").addEventListener("click", () => {
