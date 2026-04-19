@@ -1,7 +1,7 @@
 let currentSong = new Audio();
 let songs;
 let currentTrackName = "";
-
+isSeeking = false;
 let isReady = false;
 
 currentSong.addEventListener("loadedmetadata", () => {
@@ -95,10 +95,7 @@ async function main() {
         let rect = e.currentTarget.getBoundingClientRect();
         let percent = (e.clientX - rect.left) / rect.width;
 
-        let wasPlaying = !currentSong.paused;
-
-        // ✅ Pause temporarily
-        currentSong.pause();
+        isSeeking = true;
 
         document.querySelector(".circle").style.left = percent * 100 + "%";
 
@@ -106,11 +103,11 @@ async function main() {
             currentSong.currentTime = percent * currentSong.duration;
         }
 
-        // ✅ Resume if it was playing
-        if (wasPlaying) {
-            currentSong.play();
-        }
+        setTimeout(() => {
+            isSeeking = false;
+        }, 100);
     });
+
     document.querySelector(".hamburger").addEventListener("click", () => {
         document.querySelector(".left").style.left = 0;
     })
