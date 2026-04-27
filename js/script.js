@@ -1,7 +1,7 @@
 let currentSong = new Audio();
 let songs;
 let currentTrackName = "";
-isSeeking = false;
+let isSeeking = false;
 let isReady = false;
 
 currentSong.addEventListener("loadedmetadata", () => {
